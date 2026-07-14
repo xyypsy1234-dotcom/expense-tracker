@@ -80,6 +80,8 @@ export function LoginForm() {
           <div className="relative">
             <input
               {...register("password")}
+              id="password"
+              name="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               className="w-full rounded-md border border-gray-300 px-3 py-3 pr-10 outline-none focus:border-black"
