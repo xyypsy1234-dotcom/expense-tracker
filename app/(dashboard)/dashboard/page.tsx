@@ -4,12 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function DashboardPage() {
-  const { user, logout, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
-  const handleLogout = () => {
-    logout();
-    router.replace("/login");
-  };
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -31,14 +27,6 @@ export default function DashboardPage() {
       <h1>Dashboard Page</h1>
       <p>Welcome, {user.name}!</p>
       <p>{user.email}</p>
-      <div>
-        <button
-          onClick={handleLogout}
-          className="px-2 py-1.5 text-gray-500 hover:text-black font-medium "
-        >
-          Logout
-        </button>
-      </div>
     </div>
   );
 }
