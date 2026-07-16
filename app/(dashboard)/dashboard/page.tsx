@@ -2,31 +2,38 @@
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useExpenses } from "@/features/expenses/hooks/useExpenses";
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const { expenses, isLoadingExpenses } = useExpenses();
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.replace("/login");
-      return;
     }
-  }, [user, router, isLoading]);
+  }, [user, isLoading, router]);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
-
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <div>
-      <h1>Dashboard Page</h1>
-      <p>Welcome, {user.name}!</p>
-      <p>{user.email}</p>
+      {isLoadingExpenses ? (
+        <p>Loading expenses...</p>
+      ) : expenses.length === 0 ? (
+        <p>No expenses yet.</p>
+      ) : (
+        expenses.map((expense) => (
+          <div key={expense.id}>
+            <p>{expense.title}</p>
+            <p>Amount: ${expense.amount}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 }
