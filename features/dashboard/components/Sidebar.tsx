@@ -13,7 +13,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen border-r p-4 shrink-0 ">
+    <aside className="w-64 min-h-screen border-r p-4  ">
       <h2 className="mb-4 text-xl font-bold"> Expense Tracker</h2>
       <nav className="flex flex-col gap-4">
         {navLinks.map((link) => {
