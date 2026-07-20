@@ -17,6 +17,7 @@ export function ExpenseRow({ expense }: ExpenseRowProps) {
       <td className={`text-right ${tdClass}`}>€{expense.amount.toFixed(2)}</td>
 
       <td className={tdClass}>{expense.date.toLocaleDateString("en-IE")}</td>
+      <td className={tdClass}>{expense.note}</td>
 
       <td className={tdClass}>
         <div className="flex justify-center gap-3">

@@ -2,12 +2,12 @@
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useExpenses } from "@/features/expenses/hooks/useExpenses";
+
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const { expenses, isLoadingExpenses } = useExpenses();
+ 
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      {isLoadingExpenses ? (
+      {isLoading ? (
         <p>Loading expenses...</p>
       ) : expenses.length === 0 ? (
         <p>No expenses yet.</p>

@@ -21,7 +21,7 @@ export const mockExpenses: Expense[] = [
     id: "3",
     title: "Movie Tickets",
     amount: 30,
-    category: "Entertainment",
+    category: "Shopping",
     date: new Date("2026-06-03"),
     note: "Bought tickets for a movie",
   },

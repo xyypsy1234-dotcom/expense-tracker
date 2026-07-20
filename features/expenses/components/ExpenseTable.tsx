@@ -16,6 +16,7 @@ export function ExpenseTable({ expenses }: ExpenseTableProps) {
           <th className={thClass}>Category</th>
           <th className={thClass}>Amount</th>
           <th className={thClass}>Date</th>
+          <th className={thClass}>Note</th>
           <th className={thClass}>Actions</th>
         </tr>
       </thead>

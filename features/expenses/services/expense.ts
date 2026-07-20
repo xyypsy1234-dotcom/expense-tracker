@@ -1,4 +1,4 @@
-import { mockExpenses } from "../data/mockExpense";
+import { mockExpenses } from "../data/mockExpenses";
 
 import type { Expense } from "../types/expense";
 

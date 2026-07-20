@@ -1,8 +1,9 @@
+import type { Category } from "../schemas/expenseSchema";
 export interface Expense {
   id: string;
   title: string;
   amount: number;
-  category: string;
+  category: Category;
   date: Date;
   note?: string;
 }

@@ -1,12 +1,25 @@
 "use client";
-import { useExpenses } from "@/features/expenses/hooks/useExpenses";
+
+import { ExpenseForm } from "@/features/expenses/components/ExpenseForm";
 import { ExpenseTable } from "@/features/expenses/components/ExpenseTable";
+import { useExpenseContext } from "@/features/expenses/context/ExpenseContext";
+import { AddExpenseDialog } from "@/features/expenses/components/AddExpenseDialog";
+
 export default function ExpensesPage() {
-  const { expenses } = useExpenses();
+  const { expenses,  isLoadingExpenses } = useExpenseContext();
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-bold">Expenses</h1>
-      <ExpenseTable expenses={expenses} />
+      <AddExpenseDialog />
+
+      {isLoadingExpenses ? (
+        <p>Loading expenses...</p>
+      ) : expenses.length === 0 ? (
+        <p>No expenses yet.</p>
+      ) : (
+        <ExpenseTable expenses={expenses} />
+      )}
     </div>
   );
 }
