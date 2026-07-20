@@ -1,4 +1,5 @@
 import type { Expense } from "@/features/expenses/types/expense";
+import { EditExpenseDialog } from "@/features/expenses/components/EditExpenseDialog";
 
 interface ExpenseRowProps {
   expense: Expense;
@@ -21,10 +22,7 @@ export function ExpenseRow({ expense }: ExpenseRowProps) {
 
       <td className={tdClass}>
         <div className="flex justify-center gap-3">
-          <button className="rounded-md bg-blue-300 px-2 py-1 hover:bg-blue-500">
-            Edit
-          </button>
-
+          <EditExpenseDialog expense={expense} />
           <button className="rounded-md bg-red-300 px-2 py-1 hover:bg-red-500">
             Delete
           </button>

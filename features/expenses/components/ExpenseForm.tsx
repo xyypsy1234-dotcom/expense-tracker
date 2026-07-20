@@ -6,15 +6,17 @@ import {
   type ExpenseFormData,
   type ExpenseFormInput,
 } from "../schemas/expenseSchema";
+import type { Expense } from "../types/expense";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useExpenseContext } from "../context/ExpenseContext";
 
 interface ExpenseFormProps {
+  expense?: Expense;
   onSuccess?: () => void;
 }
 
-export function ExpenseForm({ onSuccess }: ExpenseFormProps) {
+export function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
   const {
     register,
     handleSubmit,
@@ -22,13 +24,30 @@ export function ExpenseForm({ onSuccess }: ExpenseFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ExpenseFormInput, unknown, ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
+    defaultValues: expense
+      ? {
+          title: expense.title,
+          amount: expense.amount,
+          category: expense.category,
+          date: expense.date.toISOString().slice(0, 10),
+          note: expense.note,
+        }
+      : undefined,
   });
 
-  const { addExpense } = useExpenseContext();
+  const { addExpense, updateExpense } = useExpenseContext();
 
   const onSubmit = (data: ExpenseFormData) => {
-    addExpense(data);
-    reset();
+    if (expense) {
+      updateExpense({
+        ...expense,
+        ...data,
+      });
+    } else {
+      addExpense(data);
+      reset();
+    }
+
     onSuccess?.();
   };
 
@@ -110,7 +129,13 @@ export function ExpenseForm({ onSuccess }: ExpenseFormProps) {
         disabled={isSubmitting}
         className="rounded-md bg-black p-2 text-white"
       >
-        {isSubmitting ? "Submitting..." : "Submit"}
+        {isSubmitting
+          ? expense
+            ? "Updating..."
+            : "Creating..."
+          : expense
+            ? "Update Expense"
+            : "Add Expense"}
       </button>
     </form>
   );
