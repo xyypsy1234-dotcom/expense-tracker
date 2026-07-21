@@ -127,7 +127,7 @@ export function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-md bg-black p-2 text-white"
+        className="rounded-md bg-green-600 p-2 text-white"
       >
         {isSubmitting
           ? expense

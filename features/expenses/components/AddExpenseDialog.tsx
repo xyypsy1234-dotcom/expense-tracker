@@ -18,8 +18,8 @@ export function AddExpenseDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800">
-          Add Expense
+        <button className="rounded-md text-sm bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+          Add Expenses
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">

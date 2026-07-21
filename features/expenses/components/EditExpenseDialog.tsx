@@ -23,7 +23,7 @@ export function EditExpenseDialog({ expense }: EditExpenseDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="rounded-md bg-blue-300 px-2 py-1 hover:bg-blue-500">
+        <button className="rounded-md bg-green-200 px-2 py-1 hover:bg-green-500">
           Edit
         </button>
       </DialogTrigger>

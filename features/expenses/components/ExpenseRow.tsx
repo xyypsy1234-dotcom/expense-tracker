@@ -28,7 +28,7 @@ export function ExpenseRow({ expense }: ExpenseRowProps) {
           <EditExpenseDialog expense={expense} />
           <button
             onClick={() => deleteExpense(expense.id)}
-            className="rounded-md bg-red-300 px-2 py-1 hover:bg-red-500"
+            className="rounded-md text-gray-700 bg-red-300 px-2 py-1 hover:bg-red-400"
           >
             Delete
           </button>
