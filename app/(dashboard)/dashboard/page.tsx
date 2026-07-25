@@ -2,6 +2,7 @@
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { DashboardGrid } from "@/features/dashboard/components/DashboardGrid";
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
@@ -20,8 +21,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1>Welcome, {user.name}!</h1>
-      <h2>Expenses</h2>
+      <DashboardGrid />
     </div>
   );
 }
