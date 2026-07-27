@@ -3,6 +3,7 @@
 import { useDashboardStats } from "../hooks/useDashboardStats";
 import { QuickStatesCard } from "./QuickStatesCard";
 import { ComparisonCard } from "./ComparisonCard";
+import { RecentTransactions } from "./RecentTransactions";
 
 export function DashboardGrid() {
   const {
@@ -13,6 +14,7 @@ export function DashboardGrid() {
     lastMonthExpenses,
     percentageChange,
     hasLastMonthData,
+    latestExpenses,
   } = useDashboardStats();
 
   return (
@@ -29,6 +31,13 @@ export function DashboardGrid() {
           percentageChange={percentageChange}
           hasLastMonthData={hasLastMonthData}
         />
+      </div>
+      <div>spending trend chart placeholder</div>
+      <div>
+        <div>category pie chart placeholder</div>
+        <div>
+          <RecentTransactions expenses={latestExpenses} />
+        </div>
       </div>
     </div>
   );
