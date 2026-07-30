@@ -6,7 +6,7 @@ export const mockExpenses: Expense[] = [
     title: "Groceries",
     amount: 50,
     category: "Food",
-    date: new Date("2026-06-01"),
+    date: new Date("2026-04-01"),
     note: "Bought fruits and vegetables",
   },
   {
@@ -14,7 +14,7 @@ export const mockExpenses: Expense[] = [
     title: "Electricity Bill",
     amount: 100,
     category: "Utilities",
-    date: new Date("2026-06-02"),
+    date: new Date("2026-05-02"),
     note: "Paid electricity bill for May",
   },
   {

@@ -4,7 +4,7 @@ interface QuickStatesCardProps {
   averageExpense: number;
 }
 
-export function QuickStatesCard({
+export function QuickStatsCard({
   totalExpenses,
   totalTransactions,
   averageExpense,
