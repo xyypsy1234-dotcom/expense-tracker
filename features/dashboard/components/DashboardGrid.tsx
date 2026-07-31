@@ -1,10 +1,11 @@
 "use client";
 
-import { useDashboardStats } from "../hooks/useDashboardStats";
+import { useDashBoardStats } from "../hooks/useDashboardStats";
 import { QuickStatsCard } from "./QuickStatsCard";
 import { ComparisonCard } from "./ComparisonCard";
 import { RecentTransactions } from "./RecentTransactions";
 import { SpendingTrendChart } from "./SpendingTrendChart";
+import { CategoryPieChart } from "./CategoryPieChart";
 
 export function DashboardGrid() {
   const {
@@ -17,11 +18,12 @@ export function DashboardGrid() {
     hasLastMonthData,
     latestExpenses,
     lineData,
-  } = useDashboardStats();
+    pieData,
+  } = useDashBoardStats();
 
   return (
     <div className="flex flex-col gap-3 w-full">
-      <div className="grid grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-2 gap-3 w-full">
         <QuickStatsCard
           totalExpenses={totalExpenses}
           totalTransactions={totalTransactions}
@@ -34,14 +36,13 @@ export function DashboardGrid() {
           hasLastMonthData={hasLastMonthData}
         />
       </div>
-      <div>
+      <div className="w-full">
         <SpendingTrendChart trendData={lineData} />
       </div>
-      <div>
-        <div>category pie chart placeholder</div>
-        <div>
-          <RecentTransactions expenses={latestExpenses} />
-        </div>
+      <div className="grid grid-cols-2 gap-3 w-full">
+        <CategoryPieChart data={pieData} />
+
+        <RecentTransactions expenses={latestExpenses} />
       </div>
     </div>
   );

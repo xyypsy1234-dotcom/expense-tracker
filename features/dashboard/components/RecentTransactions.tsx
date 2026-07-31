@@ -7,8 +7,8 @@ interface RecentTransactionsProps {
 
 export function RecentTransactions({ expenses }: RecentTransactionsProps) {
   return (
-    <section className="rounded-xl border bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-center justify-between">
+    <section className="rounded-xl border bg-white p-2 shadow-sm">
+      <div className="mb-1 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Recent Transactions</h2>
         <Link
           href="/expenses"
@@ -24,7 +24,7 @@ export function RecentTransactions({ expenses }: RecentTransactionsProps) {
           {expenses.map((expense) => (
             <div
               key={expense.id}
-              className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
+              className="flex items-center justify-between py-2 first:pt-0 last:pb-0"
             >
               <div>
                 <p> {expense.title}</p>

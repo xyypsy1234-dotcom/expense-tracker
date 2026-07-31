@@ -5,7 +5,7 @@ function getMonthKey(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
-export function useDashboardStats() {
+export function useDashBoardStats() {
   const { expenses } = useExpenseContext();
 
   return useMemo(() => {

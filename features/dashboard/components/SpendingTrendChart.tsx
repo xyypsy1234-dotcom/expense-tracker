@@ -20,8 +20,8 @@ interface SpendingTrendChartProps {
 
 export function SpendingTrendChart({ trendData }: SpendingTrendChartProps) {
   return (
-    <section className="rounded-xl border bg-white p-6 shadow-sm">
-      <div className="mb-6">
+    <section className="rounded-xl border bg-white p-3 shadow-sm">
+      <div className="mb-3">
         <h2 className="text-lg font-semibold">Monthly Spending Trend</h2>
         <p className="mt-1 text-sm text-gray-500">
           {" "}
@@ -29,15 +29,15 @@ export function SpendingTrendChart({ trendData }: SpendingTrendChartProps) {
         </p>
       </div>
       {trendData.length === 0 ? (
-        <div className="flex h-72 items-center justify-center text-gray-500 text-sm">
+        <div className="flex h-50 items-center justify-center text-gray-500 text-sm">
           No spending data available
         </div>
       ) : (
-        <div className="h-72 w-full">
+        <div className="h-56 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={trendData}
-              margin={{ top: 10, right: 20, bottom: 0, left: 0 }}
+              margin={{ top: 5, right: 5, bottom: 0, left: -20 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} />
