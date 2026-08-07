@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { categories } from "@/features/expenses/schemas/expenseSchema";
 import { ExpenseTable } from "@/features/expenses/components/ExpenseTable";
 import { useExpenseContext } from "@/features/expenses/context/ExpenseContext";
@@ -14,6 +14,8 @@ export default function ExpensesPage() {
   const [dateFilter, setDateFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("date-desc");
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const visibleExpenses = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -45,9 +47,28 @@ export default function ExpensesPage() {
 
         case "amount-desc":
           return b.amount - a.amount;
+        default:
+          return 0;
       }
     });
   }, [expenses, searchTerm, categoryFilter, dateFilter, sortOption]);
+
+  const totalItems = visibleExpenses.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalItems);
+
+  const paginatedExpenses = visibleExpenses.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter, dateFilter, sortOption]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <div className="flex flex-col gap-3">
@@ -101,8 +122,36 @@ export default function ExpensesPage() {
             : "No expenses match your filters."}
         </p>
       ) : (
-        <ExpenseTable expenses={visibleExpenses} />
+        <ExpenseTable expenses={paginatedExpenses} />
       )}
+      <div>
+        {visibleExpenses.length > 0 && (
+          <div className="flex items-center justify-start pt-1 text-sm text-gray-500">
+            <button
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              className=" pr-3 text-gray-500 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Previous
+            </button>
+            <p>
+              {startIndex + 1} - {endIndex} of {totalItems} expenses
+            </p>
+
+            <button
+              type="button"
+              disabled={currentPage === totalPages}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              className="  pl-4 text-gray-500 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
