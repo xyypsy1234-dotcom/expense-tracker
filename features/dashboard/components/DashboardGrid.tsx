@@ -1,6 +1,6 @@
 "use client";
 
-import { useDashBoardStats } from "../hooks/useDashboardStats";
+import { useDashBoardStats } from "@/features/dashboard/hooks/useDashBoardStats";
 import { QuickStatsCard } from "./QuickStatsCard";
 import { ComparisonCard } from "./ComparisonCard";
 import { RecentTransactions } from "./RecentTransactions";

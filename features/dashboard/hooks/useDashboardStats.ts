@@ -94,6 +94,7 @@ export function useDashBoardStats() {
     }));
 
     return {
+      expenses,
       totalExpenses,
       totalTransactions,
       averageExpense,
