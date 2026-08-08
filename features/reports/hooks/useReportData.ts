@@ -66,7 +66,13 @@ export function useReportData() {
     Note: expense.note ?? "",
   }));
 
+  const availableYear = Array.from(
+    new Set(expenses.map((expense) => expense.date.getFullYear())),
+  ).sort((a, b) => b - a);
+
   return {
+    expenses,
+    availableYear,
     totalExpenses,
     averageExpense,
     categoryTotals,
