@@ -25,4 +25,20 @@ export const mockExpenses: Expense[] = [
     date: new Date("2026-06-03"),
     note: "Bought tickets for a movie",
   },
+  {
+    id: "4",
+    title: "celebrating birthday",
+    amount: 100,
+    category: "Shopping",
+    date: new Date("2025-08-03"),
+    note: "birthday gift",
+  },
+  {
+    id: "5",
+    title: "physical examination",
+    amount: 50,
+    category: "Health",
+    date: new Date("2024-06-03"),
+    note: "test",
+  },
 ];

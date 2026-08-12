@@ -5,7 +5,7 @@ interface ReportSummaryProps {
   totalExpenses: number;
   averageExpense: number;
   highestExpense: Expense | null;
-  topCategory: [string, number] | null;
+  topCategory: { category: string; amount: number } | null;
 }
 
 export function ReportSummary({
@@ -37,8 +37,8 @@ export function ReportSummary({
 
         <ReportSummaryCard
           title="Top Category"
-          value={topCategory?.[0] ?? " No data"}
-          subtitle={topCategory ? `€${topCategory[1].toFixed(2)}` : undefined}
+          value={topCategory ? `€${topCategory.amount.toFixed(2)}` : "No data"}
+          subtitle={topCategory?.category ?? "No data"}
         />
       </div>
     </div>

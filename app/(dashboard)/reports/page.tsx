@@ -2,6 +2,8 @@
 import { useReportData } from "@/features/reports/hooks/useReportData";
 import { ReportFilters } from "@/features/reports/components/ReportFilters";
 import { ReportSummary } from "@/features/reports/components/ReportSummary";
+import { MonthlySpendingBarChart } from "@/features/reports/components/MonthlySpendingBarChart";
+import { CategoryBreakdown } from "@/features/reports/components/CategoryBreakdown";
 
 export default function ReportsPage() {
   const {
@@ -12,9 +14,11 @@ export default function ReportsPage() {
     averageExpense,
     highestExpense,
     topCategory,
+    monthlyReportData,
+    categoryReportData,
   } = useReportData();
   return (
-    <div className="space-y-3">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold"> Reports</h1>
@@ -37,6 +41,12 @@ export default function ReportsPage() {
           highestExpense={highestExpense}
           topCategory={topCategory}
         />
+      </div>
+      <div>
+        <MonthlySpendingBarChart data={monthlyReportData} />
+      </div>
+      <div>
+        <CategoryBreakdown data={categoryReportData} />
       </div>
     </div>
   );

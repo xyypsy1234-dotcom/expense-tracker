@@ -21,12 +21,12 @@ export function useReportData() {
     yearlyExpenses.length === 0 ? 0 : totalExpenses / yearlyExpenses.length;
 
   const highestExpense =
-    expenses.length === 0
+    yearlyExpenses.length === 0
       ? null
-      : expenses.reduce(
+      : yearlyExpenses.reduce(
           (highest, expense) =>
             expense.amount > highest.amount ? expense : highest,
-          expenses[0],
+          yearlyExpenses[0],
         );
   const categoryTotals = yearlyExpenses.reduce(
     (acc, expense) => {
@@ -36,14 +36,14 @@ export function useReportData() {
     {} as Record<string, number>,
   );
 
-  const categoryEntries = Object.entries(categoryTotals);
-  const topCategory =
-    categoryEntries.length === 0
-      ? null
-      : categoryEntries.reduce(
-          (max, current) => (current[1] > max[1] ? current : max),
-          categoryEntries[0],
-        );
+  const categoryReportData = Object.entries(categoryTotals)
+    .map(([category, amount]) => ({
+      category,
+      amount,
+    }))
+    .sort((a, b) => b.amount - a.amount);
+
+  const topCategory = categoryReportData[0] ?? null;
 
   const monthlyReportData = Object.entries(monthlyExpenses)
     .filter(([key]) => key.startsWith(`${selectedYear}-`))
@@ -84,5 +84,6 @@ export function useReportData() {
     yearlyExpenses,
     monthlyReportData,
     exportData,
+    categoryReportData,
   };
 }

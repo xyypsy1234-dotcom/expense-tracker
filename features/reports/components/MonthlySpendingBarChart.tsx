@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Bar,
   BarChart,
@@ -10,34 +9,35 @@ import {
   YAxis,
 } from "recharts";
 
-interface CategoryReportData {
-  category: string;
-  amount: number;
+interface MonthlyReportData {
+  label: string;
+  value: number;
 }
 
-interface CategoryBreakdownProps {
-  data: CategoryReportData[];
+interface MonthlySpendingBarChartProps {
+  data: MonthlyReportData[];
 }
 
-export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
+export function MonthlySpendingBarChart({
+  data,
+}: MonthlySpendingBarChartProps) {
   return (
     <section className="rounded-xl border bg-white p-1 shadow-sm">
       <div className="mb-1">
-        <h2 className="text-lg font-semibold">Category Breakdown</h2>
+        <h2 className="text-lg font-semibold">Monthly Spending</h2>
         <p className="text-sm text-gray-500">
-          Compare spending across categories
+          Spending by month for the selected year
         </p>
       </div>
       {data.length === 0 ? (
         <div className="flex h-48 items-center justify-center text-sm text-gray-500">
-          No category data available
+          No spending data available
         </div>
       ) : (
         <div className="h-48 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
-              layout="vertical"
               margin={{
                 top: 5,
                 right: 5,
@@ -45,21 +45,12 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
                 bottom: 0,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis
-                type="number"
-                // dataKey="amount"
-                domain={[0, 200]}
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} />
+              <YAxis
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value: number) => `€${value}`}
-              />
-              <YAxis
-                type="category"
-                dataKey="category"
-                tickLine={false}
-                axisLine={false}
-                width={90}
               />
               <Tooltip
                 formatter={(value) => [
@@ -68,11 +59,11 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
                 ]}
               />
               <Bar
-                dataKey="amount"
+                dataKey="value"
                 name="Spending"
                 fill="#a5a7ad"
-                radius={[0, 6, 6, 0]}
-                maxBarSize={20}
+                radius={[6, 6, 0, 0]}
+                maxBarSize={34}
               />
             </BarChart>
           </ResponsiveContainer>
