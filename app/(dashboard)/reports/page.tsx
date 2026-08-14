@@ -4,6 +4,7 @@ import { ReportFilters } from "@/features/reports/components/ReportFilters";
 import { ReportSummary } from "@/features/reports/components/ReportSummary";
 import { MonthlySpendingBarChart } from "@/features/reports/components/MonthlySpendingBarChart";
 import { CategoryBreakdown } from "@/features/reports/components/CategoryBreakdown";
+import { ExportCsvButton } from "@/features/reports/components/ExportCsvButton";
 
 export default function ReportsPage() {
   const {
@@ -16,6 +17,7 @@ export default function ReportsPage() {
     topCategory,
     monthlyReportData,
     categoryReportData,
+    exportData,
   } = useReportData();
   return (
     <div className="space-y-1">
@@ -26,12 +28,13 @@ export default function ReportsPage() {
             Analyse your spending patterns and trends
           </p>
         </div>
-        <div>
+        <div className="flex  items-center gap-10">
           <ReportFilters
             selectedYear={selectedYear}
             setSelectedYear={setSelectedYear}
             years={availableYear}
           />
+          <ExportCsvButton data={exportData} year={selectedYear} />
         </div>
       </div>
       <div>
