@@ -23,7 +23,7 @@ export default function ReportsPage() {
     <div className="space-y-1">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold"> Reports</h1>
+          <h1 className="text-2xl font-semibold"> Reports</h1>
           <p className="text-sm text-gray-500">
             Analyse your spending patterns and trends
           </p>
