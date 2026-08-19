@@ -5,21 +5,22 @@ import {
   type Currency,
   type DateFormat,
 } from "../context/PreferencesContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function PreferenceSettings() {
   const { currency, setCurrency, dateFormat, setDateFormat } = usePreferences();
-  const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    setIsSaved(true);
-  }, [currency, dateFormat]);
+  const [draftCurrency, setDraftCurrency] = useState<Currency>(currency);
+  const [draftDateFormat, setDraftDateFormat] =
+    useState<DateFormat>(dateFormat);
+  const isDirty = draftCurrency !== currency || draftDateFormat !== dateFormat;
 
   const handleSave = () => {
-    localStorage.setItem("currency", currency);
-    localStorage.setItem("dateFormat", dateFormat);
-    setIsSaved(false);
+    setCurrency(draftCurrency);
+    setDateFormat(draftDateFormat);
+    localStorage.setItem("currency", draftCurrency);
+    localStorage.setItem("dateFormat", draftDateFormat);
   };
+
   return (
     <section className="rounded-lg border bg-white p-3 shadow-sm">
       <div className="mb-1">
@@ -35,8 +36,8 @@ export function PreferenceSettings() {
           </label>
           <select
             id="currency"
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value as Currency)}
+            value={draftCurrency}
+            onChange={(e) => setDraftCurrency(e.target.value as Currency)}
             className="rounded-md border p-1"
           >
             <option value="EUR">EUR(€)</option>
@@ -50,8 +51,8 @@ export function PreferenceSettings() {
           </label>
           <select
             id="dateFormat"
-            value={dateFormat}
-            onChange={(e) => setDateFormat(e.target.value as DateFormat)}
+            value={draftDateFormat}
+            onChange={(e) => setDraftDateFormat(e.target.value as DateFormat)}
             className="rounded-md border p-2"
           >
             <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -62,9 +63,10 @@ export function PreferenceSettings() {
           <button
             type="button"
             onClick={handleSave}
-            className="rounded-md  bg-green-600 text-white px-2 py-1 hover:bg-green-700 text-sm"
+            disabled={!isDirty}
+            className="rounded-md  bg-green-600 text-white px-2 py-1 hover:bg-green-700 text-sm disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {isSaved ? "Save Changes" : "Saved"}
+            {isDirty ? "Save Changes" : "Saved"}
           </button>
         </div>
       </div>

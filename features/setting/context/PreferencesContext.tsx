@@ -44,6 +44,7 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     return new Intl.NumberFormat("en-IE", {
       style: "currency",
       currency,
+      currencyDisplay:"narrowSymbol",
     }).format(amount);
   };
 
