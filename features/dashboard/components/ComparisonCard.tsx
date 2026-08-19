@@ -1,4 +1,5 @@
 import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
+import { usePreferences } from "@/features/setting/context/PreferencesContext";
 
 interface ComparisonCardProps {
   thisMonthExpenses: number;
@@ -16,6 +17,7 @@ export function ComparisonCard({
   const isIncrease = percentageChange > 0;
   const isDecrease = percentageChange < 0;
   const difference = thisMonthExpenses - lastMonthExpenses;
+  const { formatCurrency } = usePreferences();
 
   const colorClass = isIncrease
     ? "font-semibold text-red-500"
@@ -31,7 +33,9 @@ export function ComparisonCard({
       <div className="space-y-1">
         <div>
           <p className="text-sm text-gray-500"> This Month</p>
-          <p className="text-3xl font-bold"> €{thisMonthExpenses.toFixed(2)}</p>
+          <p className="text-3xl font-bold">
+            {formatCurrency(thisMonthExpenses)}
+          </p>
         </div>
         <div className="flex items-center gap-1">
           {isIncrease && <ArrowUpRight className="text-red-500" size={24} />}
@@ -51,13 +55,13 @@ export function ComparisonCard({
         <div className="border-t pt-2 text-sm text-gray-600">
           <div className="flex justify-between">
             <span> Last Month</span>
-            <span>€{lastMonthExpenses.toFixed(2)}</span>
+            <span>{formatCurrency(lastMonthExpenses)}</span>
           </div>
           <div className="mt-2 flex justify-between">
             <span> Difference</span>
             <span className={colorClass}>
-              {difference > 0 ? "+" : difference < 0 ? "-" : ""}€
-              {Math.abs(difference).toFixed(2)}
+              {difference > 0 ? "+" : difference < 0 ? "-" : ""}
+              {formatCurrency(Math.abs(difference))}
             </span>
           </div>
         </div>

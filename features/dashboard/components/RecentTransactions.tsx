@@ -1,11 +1,13 @@
 import Link from "next/link";
 import type { Expense } from "@/features/expenses/types/expense";
+import { usePreferences } from "@/features/setting/context/PreferencesContext";
 
 interface RecentTransactionsProps {
   expenses: Expense[];
 }
 
 export function RecentTransactions({ expenses }: RecentTransactionsProps) {
+  const { formatCurrency, formatDate } = usePreferences();
   return (
     <section className="rounded-xl border bg-white p-2 shadow-sm">
       <div className="mb-1 flex items-center justify-between">
@@ -31,16 +33,10 @@ export function RecentTransactions({ expenses }: RecentTransactionsProps) {
                 <div>
                   <span> {expense.category}</span>
                   <span> .</span>
-                  <span>
-                    {expense.date.toLocaleDateString("en-IE", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
+                  <span>{formatDate(expense.date)}</span>
                 </div>
               </div>
-              <p className="font-semibold"> €{expense.amount.toFixed(2)}</p>
+              <p className="font-semibold"> {formatCurrency(expense.amount)}</p>
             </div>
           ))}
         </div>

@@ -8,6 +8,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { usePreferences } from "../../setting/context/PreferencesContext";
+
 
 interface TrendDataItem {
   label: string;
@@ -19,12 +21,15 @@ interface SpendingTrendChartProps {
 }
 
 export function SpendingTrendChart({ trendData }: SpendingTrendChartProps) {
+ const { formatCurrency } = usePreferences();
+
+
   return (
     <section className="rounded-xl border bg-white p-3 shadow-sm">
       <div className="mb-3">
         <h2 className="text-lg font-semibold">Monthly Spending Trend</h2>
         <p className="mt-1 text-sm text-gray-500">
-          {" "}
+
           Your spending across recent months.
         </p>
       </div>
@@ -37,18 +42,18 @@ export function SpendingTrendChart({ trendData }: SpendingTrendChartProps) {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={trendData}
-              margin={{ top: 5, right: 5, bottom: 0, left: -20 }}
+              margin={{ top: 5, right: 5, bottom: 0, left: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} />
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `€${value}`}
+                tickFormatter={(value) => formatCurrency(value)}
               />
               <Tooltip
                 formatter={(value) => [
-                  `€${Number(value).toFixed(2)}`,
+                  formatCurrency(Number(value)),
                   "Spending",
                 ]}
               />

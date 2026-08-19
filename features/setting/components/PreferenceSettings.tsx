@@ -1,32 +1,24 @@
 "use client";
 
+import {
+  usePreferences,
+  type Currency,
+  type DateFormat,
+} from "../context/PreferencesContext";
 import { useEffect, useState } from "react";
 
-type Currency = "EUR" | "GBP" | "USD";
-
-type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
-
 export function PreferenceSettings() {
-  const [currency, setCurrency] = useState<Currency>("EUR");
-  const [dateFormat, setDateFormat] = useState<DateFormat>("DD/MM/YYYY");
+  const { currency, setCurrency, dateFormat, setDateFormat } = usePreferences();
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    const savedCurrency = localStorage.getItem("currency") as Currency | null;
-    const savedDateFormat = localStorage.getItem(
-      "dateFormat",
-    ) as DateFormat | null;
-    if (savedCurrency) {
-      setCurrency(savedCurrency);
-    }
-
-    if (savedDateFormat) {
-      setDateFormat(savedDateFormat);
-    }
-  }, []);
+    setIsSaved(true);
+  }, [currency, dateFormat]);
 
   const handleSave = () => {
     localStorage.setItem("currency", currency);
     localStorage.setItem("dateFormat", dateFormat);
+    setIsSaved(false);
   };
   return (
     <section className="rounded-lg border bg-white p-3 shadow-sm">
@@ -72,7 +64,7 @@ export function PreferenceSettings() {
             onClick={handleSave}
             className="rounded-md  bg-green-600 text-white px-2 py-1 hover:bg-green-700 text-sm"
           >
-            Save Changes
+            {isSaved ? "Save Changes" : "Saved"}
           </button>
         </div>
       </div>

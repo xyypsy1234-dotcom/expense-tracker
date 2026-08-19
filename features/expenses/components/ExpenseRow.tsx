@@ -1,6 +1,7 @@
 import type { Expense } from "@/features/expenses/types/expense";
 import { EditExpenseDialog } from "@/features/expenses/components/EditExpenseDialog";
 import { useExpenseContext } from "../context/ExpenseContext";
+import { usePreferences } from "@/features/setting/context/PreferencesContext";
 
 interface ExpenseRowProps {
   expense: Expense;
@@ -11,6 +12,7 @@ const tdClass =
 
 export function ExpenseRow({ expense }: ExpenseRowProps) {
   const { deleteExpense } = useExpenseContext();
+  const { formatCurrency, formatDate } = usePreferences();
 
   return (
     <tr>
@@ -18,9 +20,11 @@ export function ExpenseRow({ expense }: ExpenseRowProps) {
 
       <td className={tdClass}>{expense.category}</td>
 
-      <td className={`text-right ${tdClass}`}>€{expense.amount.toFixed(2)}</td>
+      <td className={`text-right ${tdClass}`}>
+        {formatCurrency(expense.amount)}
+      </td>
 
-      <td className={tdClass}>{expense.date.toLocaleDateString("en-IE")}</td>
+      <td className={tdClass}>{formatDate(expense.date)}</td>
       <td className={tdClass}>{expense.note}</td>
 
       <td className={tdClass}>

@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { usePreferences } from "@/features/setting/context/PreferencesContext";
 
 interface MonthlyReportData {
   label: string;
@@ -21,6 +22,8 @@ interface MonthlySpendingBarChartProps {
 export function MonthlySpendingBarChart({
   data,
 }: MonthlySpendingBarChartProps) {
+  const { formatCurrency } = usePreferences();
+
   return (
     <section className="rounded-xl border bg-white p-1 shadow-sm">
       <div className="mb-1">
@@ -41,7 +44,7 @@ export function MonthlySpendingBarChart({
               margin={{
                 top: 5,
                 right: 5,
-                left: -10,
+                left: 0,
                 bottom: 0,
               }}
             >
@@ -50,11 +53,11 @@ export function MonthlySpendingBarChart({
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value: number) => `€${value}`}
+                tickFormatter={(value: number) => formatCurrency(value)}
               />
               <Tooltip
                 formatter={(value) => [
-                  `€${Number(value).toFixed(2)}`,
+                  formatCurrency(Number(value)),
                   "Spending",
                 ]}
               />

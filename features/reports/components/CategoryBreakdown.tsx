@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { usePreferences } from "@/features/setting/context/PreferencesContext";
 
 interface CategoryReportData {
   category: string;
@@ -20,6 +21,8 @@ interface CategoryBreakdownProps {
 }
 
 export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
+  const { formatCurrency } = usePreferences();
+
   return (
     <section className="rounded-xl border bg-white p-1 shadow-sm">
       <div className="mb-1">
@@ -52,7 +55,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
                 domain={[0, 200]}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value: number) => `€${value}`}
+                tickFormatter={(value: number) => formatCurrency(value)}
               />
               <YAxis
                 type="category"
@@ -63,7 +66,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
               />
               <Tooltip
                 formatter={(value) => [
-                  `€${Number(value).toFixed(2)}`,
+                  formatCurrency(Number(value)),
                   "Spending",
                 ]}
               />
