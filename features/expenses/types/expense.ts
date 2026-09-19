@@ -7,3 +7,14 @@ export interface Expense {
   date: Date;
   note?: string;
 }
+
+export interface ExpenseApiResponse {
+  id: string;
+  title: string;
+  amount: number;
+  category: Category;
+  date: string;
+  note?: string;
+  createdAt:string;
+  updatedAt:string;
+}

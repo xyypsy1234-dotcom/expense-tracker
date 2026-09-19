@@ -6,16 +6,21 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { getExpenses } from "../services/expense";
+import {
+  getExpenses,
+  createExpense,
+  updateExpense as updateExpenseApi,
+  deleteExpense as deleteExpenseApi,
+} from "../services/expenseApi";
 import type { Expense } from "../types/expense";
 import type { ExpenseFormData } from "../schemas/expenseSchema";
 
 interface ExpenseContextType {
   expenses: Expense[];
   isLoadingExpenses: boolean;
-  addExpense: (data: ExpenseFormData) => void;
-  updateExpense: (expense: Expense) => void;
-  deleteExpense: (id: string) => void;
+  addExpense: (data: ExpenseFormData) => Promise<void>;
+  updateExpense: (expense: Expense) => Promise<void>;
+  deleteExpense: (id: string) => Promise<void>;
 }
 
 interface ExpenseProviderProps {
@@ -30,30 +35,40 @@ export function ExpenseProvider({ children }: ExpenseProviderProps) {
 
   useEffect(() => {
     async function fetchExpenses() {
-      const data = await getExpenses();
-      setExpenses(data);
-      setIsLoadingExpenses(false);
+      try {
+        const data = await getExpenses();
+        setExpenses(data);
+      } catch (error) {
+        console.error("Failed to load expense:", error);
+      } finally {
+        setIsLoadingExpenses(false);
+      }
     }
     fetchExpenses();
   }, []);
 
-  const addExpense = (data: ExpenseFormData) => {
-    const newExpense: Expense = {
-      id: crypto.randomUUID(),
-      ...data,
-    };
-    setExpenses((prev) => [...prev, newExpense]);
+  const addExpense = async (data: ExpenseFormData) => {
+    const createdExpense = await createExpense(data);
+    setExpenses((prev) => [...prev, createdExpense]);
   };
 
-  const updateExpense = (updatedExpense: Expense) => {
+  const updateExpense = async (updatedExpense: Expense) => {
+    const updatedData = await updateExpenseApi(updatedExpense.id, {
+      title: updatedExpense.title,
+      category: updatedExpense.category,
+      amount: updatedExpense.amount,
+      date: updatedExpense.date,
+      note: updatedExpense.note,
+    });
     setExpenses((prev) =>
       prev.map((expense) =>
-        expense.id === updatedExpense.id ? updatedExpense : expense,
+        expense.id === updatedData.id ? updatedData : expense,
       ),
     );
   };
 
-  const deleteExpense = (id: string) => {
+  const deleteExpense = async (id: string) => {
+    await deleteExpenseApi(id);
     setExpenses((prev) => prev.filter((expense) => expense.id !== id));
   };
 

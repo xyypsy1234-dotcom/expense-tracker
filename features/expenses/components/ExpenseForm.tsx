@@ -37,14 +37,14 @@ export function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
 
   const { addExpense, updateExpense } = useExpenseContext();
 
-  const onSubmit = (data: ExpenseFormData) => {
+  const onSubmit = async (data: ExpenseFormData) => {
     if (expense) {
-      updateExpense({
+      await updateExpense({
         ...expense,
         ...data,
       });
     } else {
-      addExpense(data);
+      await addExpense(data);
       reset();
     }
 

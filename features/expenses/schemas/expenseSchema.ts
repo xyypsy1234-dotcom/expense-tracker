@@ -21,6 +21,13 @@ export const expenseSchema = z.object({
   note: z.string().optional(),
 });
 
+export const updateExpenseSchema = expenseSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided",
+  });
+
 export type ExpenseFormInput = z.input<typeof expenseSchema>;
 export type ExpenseFormData = z.output<typeof expenseSchema>;
 export type Category = (typeof categories)[number];
+export type UpdateExpenseData = z.infer<typeof updateExpenseSchema>;
