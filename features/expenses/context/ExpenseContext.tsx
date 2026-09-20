@@ -4,6 +4,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useCallback,
   type ReactNode,
 } from "react";
 import {
@@ -21,6 +22,8 @@ interface ExpenseContextType {
   addExpense: (data: ExpenseFormData) => Promise<void>;
   updateExpense: (expense: Expense) => Promise<void>;
   deleteExpense: (id: string) => Promise<void>;
+  error: string | null;
+  retryFetchExpenses: () => void;
 }
 
 interface ExpenseProviderProps {
@@ -32,20 +35,29 @@ const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 export function ExpenseProvider({ children }: ExpenseProviderProps) {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoadingExpenses, setIsLoadingExpenses] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchExpenses = useCallback(async () => {
+    try {
+      setIsLoadingExpenses(true);
+      setError(null);
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to load expense:", error);
+      setError("Failed to load expenses. Please try again.");
+    } finally {
+      setIsLoadingExpenses(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function fetchExpenses() {
-      try {
-        const data = await getExpenses();
-        setExpenses(data);
-      } catch (error) {
-        console.error("Failed to load expense:", error);
-      } finally {
-        setIsLoadingExpenses(false);
-      }
-    }
     fetchExpenses();
-  }, []);
+  }, [fetchExpenses]);
+
+  const retryFetchExpenses = () => {
+    fetchExpenses();
+  };
 
   const addExpense = async (data: ExpenseFormData) => {
     const createdExpense = await createExpense(data);
@@ -80,6 +92,8 @@ export function ExpenseProvider({ children }: ExpenseProviderProps) {
         addExpense,
         updateExpense,
         deleteExpense,
+        error,
+        retryFetchExpenses,
       }}
     >
       {children}

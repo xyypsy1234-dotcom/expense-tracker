@@ -10,6 +10,7 @@ import type { Expense } from "../types/expense";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useExpenseContext } from "../context/ExpenseContext";
+import { useState } from "react";
 
 interface ExpenseFormProps {
   expense?: Expense;
@@ -36,19 +37,30 @@ export function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
   });
 
   const { addExpense, updateExpense } = useExpenseContext();
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const onSubmit = async (data: ExpenseFormData) => {
-    if (expense) {
-      await updateExpense({
-        ...expense,
-        ...data,
-      });
-    } else {
-      await addExpense(data);
-      reset();
-    }
+    try {
+      setSubmitError(null);
 
-    onSuccess?.();
+      if (expense) {
+        await updateExpense({
+          ...expense,
+          ...data,
+        });
+      } else {
+        await addExpense(data);
+        reset();
+      }
+      onSuccess?.();
+    } catch (error) {
+      console.error("Failed to save expense:", error);
+      if (expense) {
+        setSubmitError("Failed to update expense. Please try again.");
+      } else {
+        setSubmitError("Failed to add expense. Please try again.");
+      }
+    }
   };
 
   return (
@@ -56,6 +68,7 @@ export function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4 max-w-md"
     >
+      {submitError && <p className="text-sm text-red-500">{submitError}</p>}
       <div className="flex flex-col gap-1">
         <label htmlFor="title">Title</label>
         <input

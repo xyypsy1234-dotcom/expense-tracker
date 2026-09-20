@@ -9,7 +9,8 @@ import { AddExpenseDialog } from "@/features/expenses/components/AddExpenseDialo
 type SortOption = "date-desc" | "date-asc" | "amount-desc" | "amount-asc";
 
 export default function ExpensesPage() {
-  const { expenses, isLoadingExpenses } = useExpenseContext();
+  const { expenses, isLoadingExpenses, error, retryFetchExpenses } =
+    useExpenseContext();
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -115,6 +116,17 @@ export default function ExpensesPage() {
       </div>
       {isLoadingExpenses ? (
         <p>Loading expenses...</p>
+      ) : error ? (
+        <div className="flex flex-col gap-1">
+          <p className="text-black">{error}</p>
+          <button
+            type="button"
+            onClick={retryFetchExpenses}
+            className="w-fit rounded-md bg-gray-200 px-3 py-2 text-sm hover:bg-gray-300 "
+          >
+            Retry
+          </button>
+        </div>
       ) : visibleExpenses.length === 0 ? (
         <p>
           {expenses.length === 0
