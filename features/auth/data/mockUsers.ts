@@ -1,8 +1,0 @@
-export const mockUsers = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "test@example.com",
-    password: "password123",
-  },
-];

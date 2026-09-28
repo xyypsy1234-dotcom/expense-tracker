@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
-import { login } from "../services/login";
+import { login } from "../services/authApi";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +15,6 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -24,15 +23,15 @@ export function LoginForm() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
-    setServerError("");
-    const result = await login(data);
-    if (result.success) {
-      loginUser(result.user);
+    try {
+      setServerError("");
+      const user = await login(data);
+      loginUser(user);
       router.push("/dashboard");
-      reset();
-      return;
+    } catch (error) {
+      console.error("Login failed:", error);
+      setServerError("Invalid email or password");
     }
-    setServerError(result.error);
   };
 
   return (

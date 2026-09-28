@@ -17,7 +17,9 @@ function mapExpenseResponse(expense: ExpenseApiResponse): Expense {
 }
 
 export async function getExpenses(): Promise<Expense[]> {
-  const response = await fetch(`${API_URL}/api/expenses`);
+  const response = await fetch(`${API_URL}/api/expenses`, {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch expenses");
   }
@@ -31,6 +33,7 @@ export async function createExpense(data: ExpenseFormData): Promise<Expense> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      credentials: "include",
     },
     body: JSON.stringify(data),
   });
@@ -49,6 +52,7 @@ export async function updateExpense(
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      credentials: "include",
     },
     body: JSON.stringify(data),
   });
@@ -62,6 +66,7 @@ export async function updateExpense(
 export async function deleteExpense(id: string): Promise<void> {
   const response = await fetch(`${API_URL}/api/expenses/${id}`, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to delete expense");

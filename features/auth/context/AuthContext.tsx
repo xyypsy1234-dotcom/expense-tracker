@@ -8,11 +8,12 @@ import {
   useEffect,
 } from "react";
 import type { User } from "../types/auth";
+import { getMe, logout as logoutApi } from "../services/authApi";
 
 interface AuthContextType {
   user: User | null;
   loginUser: (user: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -25,23 +26,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  useEffect(() => {
+    async function restoreUser() {
+      try {
+        const user = await getMe();
+        setUser(user);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
+    restoreUser();
   }, []);
 
   const loginUser = (user: User) => {
     setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await logoutApi();
     setUser(null);
-    localStorage.removeItem("user");
   };
 
   return (

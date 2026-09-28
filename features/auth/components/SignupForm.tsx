@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { signup } from "../services/signup";
+import { register as registerApi } from "../services/authApi";
 import { useRouter } from "next/navigation";
 
 export function SignupForm() {
@@ -18,23 +18,33 @@ export function SignupForm() {
   });
 
   const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = async (data: SignupFormData) => {
-    const result = await signup(data);
-
-    if (result.success) {
-      setMessage("Account created successfully!");
+    try {
+      setError("");
+      setMessage("");
+      await registerApi({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      setMessage("Account created successfully. You can now log in!");
       reset();
       setTimeout(() => {
         router.push("/login");
-      }, 1000);
-      return;
+      }, 3000);
+    } catch (error) {
+      console.error("Signup failed:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Failed to create account");
+      }
     }
-    setMessage(result.error);
   };
 
   return (
@@ -43,7 +53,10 @@ export function SignupForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-sm flex flex-col gap-6"
       >
-        <div>{message && <p className="text-red-500">{message}</p>}</div>
+        <div>
+          {message && <p className="text-black-500">{message}</p>}
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
         <div className="flex flex-col gap-1">
           <label
             htmlFor="name"
