@@ -22,6 +22,9 @@ interface RegisterData {
   password: string;
 }
 
+interface CheckEmailResponse {
+  exists: boolean;
+}
 export async function login(data: LoginData): Promise<User> {
   const response = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
@@ -49,7 +52,7 @@ export async function register(data: RegisterData): Promise<User> {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    const errorData = await response.json()
+    const errorData = await response.json();
     throw new Error(errorData.error);
   }
   const result: AuthResponse = await response.json();
@@ -77,4 +80,15 @@ export async function logout(): Promise<void> {
   if (!response.ok) {
     throw new Error("Failed to logout");
   }
+}
+
+export async function checkEmail(email: string): Promise<boolean> {
+  const response = await fetch(
+    `${API_URL}/api/auth/check-email?email=${encodeURIComponent(email)}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to check email");
+  }
+  const data: CheckEmailResponse = await response.json();
+  return data.exists;
 }

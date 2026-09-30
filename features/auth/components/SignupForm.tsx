@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupFormData } from "../schemas/signupSchema";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { register as registerApi } from "../services/authApi";
+import { register as registerApi, checkEmail } from "../services/authApi";
 import { useRouter } from "next/navigation";
 
 export function SignupForm() {
@@ -12,6 +12,10 @@ export function SignupForm() {
     register,
     handleSubmit,
     reset,
+    getValues,
+    trigger,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -21,11 +25,48 @@ export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [serverError, setServerError] = useState("");
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [emailAvailable, setEmailAvailabe] = useState(false);
+
+  const emailRegisterb = register("email");
+
+  const handleEmailBlur = async () => {
+    const email = getValues("email");
+    if (!email) {
+      setEmailAvailabe(false);
+      return;
+    }
+    const isValid = await trigger("email");
+    if (!isValid) {
+      setEmailAvailabe(false);
+      return;
+    }
+
+    try {
+      setIsCheckingEmail(true);
+      const exists = await checkEmail(email);
+      if (exists) {
+        setError("email", {
+          type: "manual",
+          message: "Email already registered",
+        });
+        setEmailAvailabe(false);
+      } else {
+        clearErrors("email");
+        setEmailAvailabe(true);
+      }
+    } catch (error) {
+      console.error("Email check failed:", error);
+      setEmailAvailabe(false);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      setError("");
+      setServerError("");
       setMessage("");
       await registerApi({
         name: data.name,
@@ -34,15 +75,16 @@ export function SignupForm() {
       });
       setMessage("Account created successfully. You can now log in!");
       reset();
+      setEmailAvailabe(false);
       setTimeout(() => {
         router.push("/login");
       }, 3000);
     } catch (error) {
       console.error("Signup failed:", error);
       if (error instanceof Error) {
-        setError(error.message);
+        setServerError(error.message);
       } else {
-        setError("Failed to create account");
+        setServerError("Failed to create account");
       }
     }
   };
@@ -54,8 +96,8 @@ export function SignupForm() {
         className="w-full max-w-sm flex flex-col gap-6"
       >
         <div>
-          {message && <p className="text-black-500">{message}</p>}
-          {error && <p className="text-red-500">{error}</p>}
+          {message && <p className="text-green-500">{message}</p>}
+          {serverError && <p className="text-red-500">{serverError}</p>}
         </div>
         <div className="flex flex-col gap-1">
           <label
@@ -79,13 +121,23 @@ export function SignupForm() {
           </label>
           <input
             id="email"
-            {...register("email")}
+            {...emailRegisterb}
+            onBlur={async (event) => {
+              emailRegisterb.onBlur(event);
+              await handleEmailBlur();
+            }}
             type="email"
             placeholder="Enter your email"
             className="rounded-md p-2 border border-gray-300 outline-none focus:border-black"
           />
           {errors.email && (
             <p className="text-red-500">{errors.email.message}</p>
+          )}
+          {isCheckingEmail && !errors.email && (
+            <p className="text-sm text-muted-foreground">Checking email...</p>
+          )}
+          {emailAvailable && !errors.email && (
+            <p className="text-sm text-green-600">Email is available</p>
           )}
         </div>
         <div className="flex flex-col gap-1">
@@ -150,7 +202,7 @@ export function SignupForm() {
         <div className="flex flex-col gap-1">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !emailAvailable}
             className="rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300 disabled:opacity-50"
           >
             {isSubmitting ? "Creating..." : "Create Account"}
