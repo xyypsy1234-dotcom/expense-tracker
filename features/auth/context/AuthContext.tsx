@@ -15,6 +15,7 @@ interface AuthContextType {
   loginUser: (user: User) => void;
   logout: () => Promise<void>;
   isLoading: boolean;
+  clearUser: () => void;
 }
 
 interface AuthProviderProps {
@@ -46,12 +47,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    await logoutApi();
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setUser(null);
+    }
+  };
+
+  const clearUser = () => {
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginUser, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, loginUser, logout, isLoading, clearUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

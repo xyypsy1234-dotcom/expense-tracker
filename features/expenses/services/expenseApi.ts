@@ -3,6 +3,8 @@ import type {
   UpdateExpenseData,
 } from "../schemas/expenseSchema";
 import type { Expense, ExpenseApiResponse } from "../types/expense";
+import { ApiError } from "@/features/shared/utils/ApiError";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function mapExpenseResponse(expense: ExpenseApiResponse): Expense {
@@ -21,8 +23,12 @@ export async function getExpenses(): Promise<Expense[]> {
     credentials: "include",
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch expenses");
+    if (response.status === 401) {
+      throw new ApiError("Your session has expired. Please log in again.", 401);
+    }
+    throw new ApiError("Failed to fetch expenses", response.status);
   }
+
   const data: ExpenseApiResponse[] = await response.json();
 
   return data.map(mapExpenseResponse);
@@ -33,12 +39,15 @@ export async function createExpense(data: ExpenseFormData): Promise<Expense> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      credentials: "include",
     },
+    credentials: "include",
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error("Failed to create expense");
+    if (response.status === 401) {
+      throw new ApiError("Your session has expired. Please log in again.", 401);
+    }
+    throw new ApiError("Failed to create expense", response.status);
   }
   const createdExpense: ExpenseApiResponse = await response.json();
   return mapExpenseResponse(createdExpense);
@@ -52,12 +61,15 @@ export async function updateExpense(
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      credentials: "include",
     },
+    credentials: "include",
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error("Failed to update expense");
+    if (response.status === 401) {
+      throw new ApiError("Your session has expired. Please log in again.", 401);
+    }
+    throw new ApiError("Failed to update expense", response.status);
   }
   const updatedExpense: ExpenseApiResponse = await response.json();
   return mapExpenseResponse(updatedExpense);
@@ -69,6 +81,9 @@ export async function deleteExpense(id: string): Promise<void> {
     credentials: "include",
   });
   if (!response.ok) {
-    throw new Error("Failed to delete expense");
+    if (response.status === 401) {
+      throw new ApiError("Your session has expired. Please log in again.", 401);
+    }
+    throw new ApiError("Failed to delete expense", response.status);
   }
 }
