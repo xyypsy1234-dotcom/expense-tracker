@@ -25,7 +25,7 @@ export function DashboardGrid() {
     <div className="flex flex-col gap-3 w-full">
       <div className="grid grid-cols-2 gap-3 w-full">
         <QuickStatsCard
-          totalExpenses={totalExpenses}o
+          totalExpenses={totalExpenses}
           totalTransactions={totalTransactions}
           averageExpense={averageExpense}
         />
