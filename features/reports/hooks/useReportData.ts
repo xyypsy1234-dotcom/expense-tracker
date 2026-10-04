@@ -1,11 +1,11 @@
 "use client";
-import { useDashBoardStats } from "@/features/dashboard/hooks/useDashBoardStats";
+import { useDashboardStats } from "@/features/dashboard/hooks/useDashboardStats";
 import { useExpenseContext } from "@/features/expenses/context/ExpenseContext";
 import { useState } from "react";
 
 export function useReportData() {
   const { expenses } = useExpenseContext();
-  const { monthlyExpenses } = useDashBoardStats();
+  const { monthlyExpenses } = useDashboardStats();
   const [selectedYear, setSelectedYear] = useState(2026);
 
   const yearlyExpenses = expenses.filter(

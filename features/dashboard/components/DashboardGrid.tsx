@@ -1,6 +1,6 @@
 "use client";
 
-import { useDashBoardStats } from "@/features/dashboard/hooks/useDashBoardStats";
+import { useDashboardStats } from "@/features/dashboard/hooks/useDashboardStats";
 import { QuickStatsCard } from "./QuickStatsCard";
 import { ComparisonCard } from "./ComparisonCard";
 import { RecentTransactions } from "./RecentTransactions";
@@ -19,7 +19,7 @@ export function DashboardGrid() {
     latestExpenses,
     lineData,
     pieData,
-  } = useDashBoardStats();
+  } = useDashboardStats();
 
   return (
     <div className="flex flex-col gap-3 w-full">
