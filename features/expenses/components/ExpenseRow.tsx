@@ -53,7 +53,7 @@ export function ExpenseRow({ expense }: ExpenseRowProps) {
             className="rounded-md text-gray-700 bg-red-300 px-2 py-1 hover:bg-red-400 
             disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isDeleting ? "Deleting..." : "Deleted"}
+            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         </div>
         {deleteError && <p className="text-sm text-red-500">{deleteError}</p>}

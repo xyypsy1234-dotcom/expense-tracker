@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Expense Tracker
 
-## Getting Started
+A full-stack personal management application built with Next.js, TypeScript, Express, PostgreSQL, and Prisma.
+Expense Tracker allows users to securely manage their expenses, analyze sepending, and generate yearly reports through a responsive dashboard.
 
-First, run the development server:
+## Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Live Application:** https://expense-tracker-me-2740.vercel.app
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Application Preview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+b
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+### Authentication
 
-To learn more about Next.js, take a look at the following resources:
+- User registration and login
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- JWT-based authentication using secure htttpOnly cookies
+- Persistent login sessions across page refreshes
+- Protected dashboard routes
+- Email availability validation during registration
+- Secure logout and session handling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Expense Management
 
-## Deploy on Vercel
+- Create, view, edit, and delete personal expenses
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Search expenses by title or note
+- Filter expenses by category and date
+- Sort expense records
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Paginated expense table
+- Form validation with React Hook Form and Zod
+- User specific expense data protected by backend authorization
+
+### Dahboard & Analytics
+
+- Total spending, average expense, and transaction statistics
+
+- Month-over-month spending comparison
+- Spending trend visualization
+- Category-based spending breakdown
+- Recent transaction overview
+
+### Reports
+
+- Year-based expense reports
+
+- Monthly spending analysis
+- Category spending summaries
+- Top spending category calculation
+- CSV export
+
+### User Preferences
+
+- Currency preference
+
+- Date format preference
+- Preferences persisted between session
+
+## Tech Stack
+
+### Frontend
+
+- Next.js 16
+
+- React 19
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- React Hook Form
+- Zod
+- Recharts
+
+### Backend
+
+- Node.js
+
+- Express 5
+- TypeScript
+- Prisma ORM
+- JWT (JSON Web Token)
+- bcrypt
+- Zod
+
+### Database
+
+- PostgreSQL
+- Neon
+
+### Deployment
+
+- Vercel -- Frontend
+- Render -- Backend API
+- Neon -- PostgreSQL database
+
+## Architecture
+
+The application uses a separated frontend and backend architecture.
+
+POST PICTURE HERE
+
+The frontend communicates with the Express backend through REST API requests.
+The backend handles authentication, authorization, business logic, and database access.
+Expense data is scoped to the authenticated user, preventing user from accessing or modifying expenses that belong to another account.
+
+## Authentication Flow
+
+Authentication is handled by the Express backend using JWT stored in secure httpOnly cookies.
+
+POST PICTURE HERE
+
+The authentication system include:
+
+- Password hashing and verification with bcrypt
+
+- JWT-based authentication
+- Secure HttpOnly cookies for storing authentication tokens
+- Protected API routes using authentication middleware
+- Session restoration through the `/api/auth/me` endpoint
+- User-specific authorization for expense operation
+- secure logout by clearing the authentication cookie
